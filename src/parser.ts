@@ -40,10 +40,37 @@ export function transformColumnWithTableName(tokens: Token[]): Token[] {
   return result
 }
 
+export function transformFunctionCall(tokens: Token[]): Token[] {
+  const result: Token[] = []
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i]
+    if (token.type === 'char' && token.value === '(') {
+      // concat function call expression
+      let acc = ''
+      acc += result.pop()!.value // function nme
+      acc += token.value // '('
+      i++
+      for (; i < tokens.length; i++) {
+        token = tokens[i]
+        acc += token.value
+        if (token.type === 'char' && token.value === ')') {
+          i++
+          break
+        }
+      }
+      result.push({ type: 'word', value: acc })
+      continue
+    }
+    result.push(token)
+  }
+  return result
+}
+
 export function parseSql(sql: string) {
   let tokens = tokenize(sql)
   tokens = transformQuotes(tokens)
   tokens = transformColumnWithTableName(tokens)
+  tokens = transformFunctionCall(tokens)
   tokens = tokens.filter(token => token.type !== 'whitespace')
   console.log({ tokens })
   const asts: AST[] = []

@@ -9,6 +9,7 @@ Project Status: **Building Initial Prototype**
 ## Progress
 - [x] Extra column name from select statement
   - [x] Support alias column name
+  - [x] Support function call (e.g. `COUNT(*)`)
 - [ ] Generate Typescript type for:
   - [ ] Row of select result
   - [ ] Named parameters for prepared statement
