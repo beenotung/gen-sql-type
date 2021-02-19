@@ -1,8 +1,25 @@
 import { expect } from 'chai'
-import { parseSql } from './parser'
+import { parseSql, transformQuotes } from './parser'
 import { Select } from './ast'
+import { tokenize } from './tokenizer'
 
 describe('parser', () => {
+  context('transformQuotes', () => {
+    it('should parse term with single quote', function () {
+      let tokens = tokenize("select id as 'user id' from user")
+      tokens = transformQuotes(tokens)
+      tokens = tokens.filter(token => token.type !== 'whitespace')
+      expect(tokens).deep.equals([
+        { type: 'word', value: 'select' },
+        { type: 'word', value: 'id' },
+        { type: 'word', value: 'as' },
+        { type: 'word', value: 'user id' },
+        { type: 'word', value: 'from' },
+        { type: 'word', value: 'user' },
+      ])
+    })
+  })
+
   context('select expression', () => {
     it('should parse column names in basic expression', () => {
       let asts = parseSql('select id,username from user')

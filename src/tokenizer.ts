@@ -1,17 +1,17 @@
 import { isBetween } from '@beenotung/tslib/compare'
 
-export type Token = Keyword | Whitespace | Char
-export type Keyword = {
-  type: 'keyword'
-  name: string
+export type Token = Word | Whitespace | Char
+export type Word = {
+  type: 'word'
+  value: string
 }
 export type Whitespace = {
   type: 'whitespace'
-  char: string
+  value: string
 }
 export type Char = {
   type: 'char'
-  name: string
+  value: string
 }
 
 export function tokenize(sql: string) {
@@ -25,18 +25,18 @@ export function tokenize(sql: string) {
       continue
     }
     if (acc) {
-      tokens.push({ type: 'keyword', name: acc })
+      tokens.push({ type: 'word', value: acc })
       acc = ''
       i--
       continue
     }
     if (isWhitespace(char)) {
-      tokens.push({ type: 'whitespace', char })
+      tokens.push({ type: 'whitespace', value: char })
       continue
     }
-    tokens.push({ type: 'char', name: char })
+    tokens.push({ type: 'char', value: char })
   }
-  return tokens.filter(token => token.type !== 'whitespace')
+  return tokens
 }
 
 function isWhitespace(char: string) {
