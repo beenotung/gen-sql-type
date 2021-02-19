@@ -50,6 +50,11 @@ export function parseSql(sql: string) {
         if (token.value === 'from') {
           break
         }
+        if (token.value === 'as') {
+          // replace column expression with alias name
+          columns.pop()
+          nextToken()
+        }
         columns.push(token.value)
         continue
       }

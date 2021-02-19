@@ -39,7 +39,10 @@ describe('parser', () => {
     })
 
     it('should parse column names with alias', function () {
-      // TODO
+      let asts = parseSql("select id as 'user id' from user")
+      expect(asts).to.have.lengthOf(1)
+      expect(asts[0].type).to.equals('select')
+      expect((asts[0] as Select).columns).to.deep.equals(['user id'])
     })
   })
 })
