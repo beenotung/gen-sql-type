@@ -48,10 +48,10 @@ export function parseSql(sql: string) {
     token = tokens[offset]
   }
 
-  function prevToken() {
-    offset--
-    token = tokens[offset]
-  }
+  // function prevToken() {
+  //   offset--
+  //   token = tokens[offset]
+  // }
 
   function unknownToken(context: string) {
     console.error('[TODO] unknown token:', { context, offset, token })
