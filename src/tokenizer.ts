@@ -15,6 +15,7 @@ export type Char = {
 }
 
 export function tokenize(sql: string) {
+  // add extra whitespace to avoid need of cleanup after for-loop
   sql += ' '
   const tokens: Token[] = []
   let acc = ''
@@ -36,6 +37,8 @@ export function tokenize(sql: string) {
     }
     tokens.push({ type: 'char', value: char })
   }
+  // remove extra whitespace
+  tokens.pop()
   return tokens
 }
 
@@ -45,8 +48,9 @@ function isWhitespace(char: string) {
 
 function isKeyword(char: string) {
   return (
+    char === '_' ||
+    isBetween('0', char, '9') ||
     isBetween('a', char, 'z') ||
-    isBetween('A', char, 'Z') ||
-    isBetween('0', char, '9')
+    isBetween('A', char, 'Z')
   )
 }

@@ -15,5 +15,10 @@ describe('tokenizer', () => {
         { type: 'word', value: 'user' },
       ])
     })
+
+    it('should tokenize word with underscore', function () {
+      let tokens = tokenize('user_id')
+      expect(tokens).deep.equals([{ type: 'word', value: 'user_id' }])
+    })
   })
 })

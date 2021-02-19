@@ -23,9 +23,27 @@ export function transformQuotes(tokens: Token[]): Token[] {
   return result
 }
 
+export function transformColumnWithTableName(tokens: Token[]): Token[] {
+  const result: Token[] = []
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
+    if (token.type === 'char' && token.value === '.') {
+      // replace table name by column name
+      result.pop()
+      i++
+      const column = tokens[i]
+      result.push(column)
+      continue
+    }
+    result.push(token)
+  }
+  return result
+}
+
 export function parseSql(sql: string) {
   let tokens = tokenize(sql)
   tokens = transformQuotes(tokens)
+  tokens = transformColumnWithTableName(tokens)
   tokens = tokens.filter(token => token.type !== 'whitespace')
   console.log({ tokens })
   const asts: AST[] = []
@@ -51,7 +69,7 @@ export function parseSql(sql: string) {
           break
         }
         if (token.value === 'as') {
-          // replace column expression with alias name
+          // replace column expression by alias name
           columns.pop()
           nextToken()
         }
