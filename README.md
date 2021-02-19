@@ -13,3 +13,7 @@ Project Status: **Building Initial Prototype**
 - [ ] Generate Typescript type for:
   - [ ] Row of select result
   - [ ] Named parameters for prepared statement
+
+## License
+This is free and open-source software (FOSS) with
+[BSD-2-Clause License](./LICENSE)
