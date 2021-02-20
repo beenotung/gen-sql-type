@@ -20,6 +20,7 @@ describe('parser', () => {
         ])
       })
     }
+
     test('single quote', "'")
     test('double quote', '"')
     test('back quote', '`')
