@@ -108,6 +108,7 @@ export function parseSql(sql: string) {
           // replace column expression by alias with 'AS'
           columns.pop()
           nextToken()
+          isExpectComma = false
         }
         if (isExpectComma) {
           // replace column express by alias without 'AS'
@@ -118,6 +119,7 @@ export function parseSql(sql: string) {
         continue
       }
       if (token.type === 'char' && token.value === ',') {
+        isExpectComma = false
         continue
       }
       unknownToken('parseSelect')
