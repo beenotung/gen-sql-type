@@ -11,6 +11,7 @@ Project Status: **Building Initial Prototype**
   - [x] Support alias column name
   - [x] Support function call (e.g. `COUNT(*)`)
   - [x] Support quoted column name with escape sequence
+  - [x] Support named parameters (e.g. `:id` and `@username`)
 - [ ] Generate Typescript type for:
   - [ ] Row of select result
   - [ ] Named parameters for prepared statement

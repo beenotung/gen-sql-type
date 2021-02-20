@@ -1,6 +1,6 @@
 import { isBetween } from '@beenotung/tslib/compare'
 
-export type Token = Word | Whitespace | Char
+export type Token = Word | Whitespace | Char | Parameter
 export type Word = {
   type: 'word'
   value: string
@@ -11,6 +11,10 @@ export type Whitespace = {
 }
 export type Char = {
   type: 'char'
+  value: string
+}
+export type Parameter = {
+  type: 'parameter'
   value: string
 }
 

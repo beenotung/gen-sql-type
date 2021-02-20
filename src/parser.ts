@@ -8,7 +8,6 @@ export function transformQuotes(tokens: Token[]): Token[] {
   return tokens
 }
 
-// TODO handle escape sequence
 function transformQuote(tokens: Token[], quote: string): Token[] {
   const result: Token[] = []
   let acc = ''
@@ -92,11 +91,37 @@ export function transformFunctionCall(tokens: Token[]): Token[] {
   return result
 }
 
+export function transformParameters(tokens: Token[]): Token[] {
+  tokens = transformParameter(tokens, ':')
+  tokens = transformParameter(tokens, '@')
+  return tokens
+}
+
+function transformParameter(tokens: Token[], prefix: string): Token[] {
+  const result: Token[] = []
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
+    if (
+      token.type === 'char' &&
+      token.value === prefix &&
+      i + 1 < tokens.length &&
+      tokens[i + 1].type === 'word'
+    ) {
+      i++
+      result.push({ type: 'parameter', value: tokens[i].value })
+      continue
+    }
+    result.push(token)
+  }
+  return result
+}
+
 export function parseSql(sql: string) {
   let tokens = tokenize(sql)
   tokens = transformQuotes(tokens)
   tokens = transformColumnWithTableName(tokens)
   tokens = transformFunctionCall(tokens)
+  tokens = transformParameters(tokens)
   tokens = tokens.filter(token => token.type !== 'whitespace')
   console.log({ tokens })
   const asts: AST[] = []
@@ -142,13 +167,18 @@ export function parseSql(sql: string) {
       }
       unknownToken('parseSelect')
     }
-    asts.push({ type: 'select', columns })
+    const parameters: string[] = []
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'char' && token.value === ';') {
         break
       }
+      if (token.type === 'parameter') {
+        parameters.push(token.value)
+        continue
+      }
       // skip select body
     }
+    asts.push({ type: 'select', columns, parameters })
   }
 
   function nextToken() {

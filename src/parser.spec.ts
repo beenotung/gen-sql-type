@@ -126,6 +126,22 @@ describe('parser', () => {
       })
     })
 
+    context('named parameters', function () {
+      function test(prefix: string) {
+        it(`should recongize parameter prefix '${prefix}'`, () => {
+          let asts = parseSql(
+            `select username from user where id = ${prefix}id`,
+          )
+          expect(asts).to.have.lengthOf(1)
+          expect(asts[0].type).to.equals('select')
+          let select = asts[0] as Select
+          expect(select.parameters).to.deep.equals(['id'])
+        })
+      }
+      test(':')
+      test('@')
+    })
+
     it('should parse multiple select statement', function () {
       let asts = parseSql('select id from user;select username from user')
       expect(asts).to.have.lengthOf(2)
