@@ -46,7 +46,7 @@ function isWhitespace(char: string) {
   return char.trim().length === 0
 }
 
-function isKeyword(char: string) {
+export function isKeyword(char: string) {
   return (
     char === '_' ||
     isBetween('0', char, '9') ||
