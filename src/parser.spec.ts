@@ -108,6 +108,24 @@ describe('parser', () => {
       })
     })
 
+    context('distinct column expression', function () {
+      it('should parse distinct column', function () {
+        let asts = parseSql('select distinct salary from Employee e1')
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        let select = asts[0] as Select
+        expect(select.columns).to.deep.equals(['salary'])
+      })
+
+      it('should parse distinct column with alias', function () {
+        let asts = parseSql('select distinct salary income from Employee e1')
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        let select = asts[0] as Select
+        expect(select.columns).to.deep.equals(['income'])
+      })
+    })
+
     it('should parse multiple select statement', function () {
       let asts = parseSql('select id from user;select username from user')
       expect(asts).to.have.lengthOf(2)
