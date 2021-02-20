@@ -59,10 +59,12 @@ export function transformColumnWithTableName(tokens: Token[]): Token[] {
 
 export function transformFunctionCall(tokens: Token[]): Token[] {
   const result: Token[] = []
+  let level = 0
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i]
+    // concat function call expression
     if (token.type === 'char' && token.value === '(') {
-      // concat function call expression
+      level++
       let acc = ''
       acc += result.pop()!.value // function nme
       acc += token.value // '('
@@ -70,9 +72,16 @@ export function transformFunctionCall(tokens: Token[]): Token[] {
       for (; i < tokens.length; i++) {
         token = tokens[i]
         acc += token.value
-        if (token.type === 'char' && token.value === ')') {
-          i++
-          break
+        if (token.type === 'char') {
+          if (token.value === '(') {
+            level++
+          } else if (token.value === ')') {
+            level--
+            if (level === 0) {
+              i++
+              break
+            }
+          }
         }
       }
       result.push({ type: 'word', value: acc })

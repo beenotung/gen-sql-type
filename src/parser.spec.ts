@@ -88,12 +88,24 @@ describe('parser', () => {
       expect(select.columns).to.deep.equals(['id', 'max_salary'])
     })
 
-    it('should parse function call with wildcard', function () {
-      let asts = parseSql('select count(*) as count from user')
-      expect(asts).to.have.lengthOf(1)
-      expect(asts[0].type).to.equals('select')
-      let select = asts[0] as Select
-      expect(select.columns).to.deep.equals(['count'])
+    context('function call', function () {
+      it('should parse function call with wildcard', function () {
+        let asts = parseSql('select count(*) as count from user')
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        let select = asts[0] as Select
+        expect(select.columns).to.deep.equals(['count'])
+      })
+
+      it('should parse nested function call', function () {
+        let asts = parseSql(
+          'select AVG(ISNULL(DATEDIFF(SECOND, start_time, end_time),0)) as avg_diff from calls',
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        let select = asts[0] as Select
+        expect(select.columns).to.deep.equals(['avg_diff'])
+      })
     })
 
     it('should parse multiple select statement', function () {
