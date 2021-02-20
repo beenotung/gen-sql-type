@@ -41,6 +41,14 @@ describe('parser', () => {
       expect(select.columns).to.deep.equals(['id', 'username'])
     })
 
+    it('should parse terms when keywords are in upper case', function () {
+      let asts = parseSql('SELECT id,username FROM USER')
+      expect(asts).to.have.lengthOf(1)
+      expect(asts[0].type).to.equals('select')
+      let select = asts[0] as Select
+      expect(select.columns).to.deep.equals(['id', 'username'])
+    })
+
     context('column alias', () => {
       it("should parse column alias with 'AS'", function () {
         let asts = parseSql("select id as 'user id' from user")

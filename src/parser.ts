@@ -96,7 +96,7 @@ export function parseSql(sql: string) {
   for (offset = 0; offset < tokens.length; nextToken()) {
     token = tokens[offset]
     if (token.type === 'word') {
-      if (token.value === 'select') {
+      if (token.value.toLowerCase() === 'select') {
         parseSelect()
         continue
       }
@@ -110,10 +110,10 @@ export function parseSql(sql: string) {
     let isExpectComma = false
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'word') {
-        if (token.value === 'from') {
+        if (token.value.toLowerCase() === 'from') {
           break
         }
-        if (token.value === 'as') {
+        if (token.value.toLowerCase() === 'as') {
           // replace column expression by alias with 'AS'
           columns.pop()
           nextToken()
