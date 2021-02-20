@@ -13,8 +13,17 @@ function transformQuote(tokens: Token[], quote: string): Token[] {
   const result: Token[] = []
   let acc = ''
   let isInsideQuote = false
-  for (const token of tokens) {
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
     if (token.type === 'char' && token.value === quote) {
+      if (i + 1 < tokens.length && quote === "'") {
+        const next = tokens[i + 1]
+        if (next.type === 'char' && next.value === quote) {
+          acc += "'"
+          i++
+          continue
+        }
+      }
       if (isInsideQuote) {
         result.push({ type: 'word', value: acc })
       }

@@ -23,6 +23,12 @@ describe('parser', () => {
     test('single quote', "'")
     test('double quote', '"')
     test('back quote', '`')
+
+    it('should parse quoted term with escape sequence', function () {
+      let tokens = tokenize(`'I mustn''t sin!'`)
+      tokens = transformQuotes(tokens)
+      expect(tokens).deep.equals([{ type: 'word', value: "I mustn't sin!" }])
+    })
   })
 
   context('select expression', () => {
