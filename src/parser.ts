@@ -2,11 +2,19 @@ import { AST } from './ast'
 import { Token, tokenize } from './tokenizer'
 
 export function transformQuotes(tokens: Token[]): Token[] {
+  tokens = transformQuote(tokens, "'")
+  tokens = transformQuote(tokens, '"')
+  tokens = transformQuote(tokens, '`')
+  return tokens
+}
+
+// TODO handle escape sequence
+function transformQuote(tokens: Token[], quote: string): Token[] {
   const result: Token[] = []
   let acc = ''
   let isInsideQuote = false
   for (const token of tokens) {
-    if (token.type === 'char' && token.value === "'") {
+    if (token.type === 'char' && token.value === quote) {
       if (isInsideQuote) {
         result.push({ type: 'word', value: acc })
       }
@@ -90,17 +98,23 @@ export function parseSql(sql: string) {
   function parseSelect() {
     nextToken()
     const columns: string[] = []
+    let isExpectComma = false
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'word') {
         if (token.value === 'from') {
           break
         }
         if (token.value === 'as') {
-          // replace column expression by alias name
+          // replace column expression by alias with 'AS'
           columns.pop()
           nextToken()
         }
+        if (isExpectComma) {
+          // replace column express by alias without 'AS'
+          columns.pop()
+        }
         columns.push(token.value)
+        isExpectComma = true
         continue
       }
       if (token.type === 'char' && token.value === ',') {

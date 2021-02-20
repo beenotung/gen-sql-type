@@ -5,19 +5,24 @@ import { tokenize } from './tokenizer'
 
 describe('parser', () => {
   context('transformQuotes', () => {
-    it('should parse term with single quote', function () {
-      let tokens = tokenize("select id as 'user id' from user")
-      tokens = transformQuotes(tokens)
-      tokens = tokens.filter(token => token.type !== 'whitespace')
-      expect(tokens).deep.equals([
-        { type: 'word', value: 'select' },
-        { type: 'word', value: 'id' },
-        { type: 'word', value: 'as' },
-        { type: 'word', value: 'user id' },
-        { type: 'word', value: 'from' },
-        { type: 'word', value: 'user' },
-      ])
-    })
+    function test(name: string, quote: string) {
+      it('should parse term with ' + name, function () {
+        let tokens = tokenize(`select id as ${quote}user id${quote} from user`)
+        tokens = transformQuotes(tokens)
+        tokens = tokens.filter(token => token.type !== 'whitespace')
+        expect(tokens).deep.equals([
+          { type: 'word', value: 'select' },
+          { type: 'word', value: 'id' },
+          { type: 'word', value: 'as' },
+          { type: 'word', value: 'user id' },
+          { type: 'word', value: 'from' },
+          { type: 'word', value: 'user' },
+        ])
+      })
+    }
+    test('single quote', "'")
+    test('double quote', '"')
+    test('back quote', '`')
   })
 
   context('select expression', () => {
@@ -29,11 +34,19 @@ describe('parser', () => {
       expect(select.columns).to.deep.equals(['id', 'username'])
     })
 
-    it('should parse column names with alias', function () {
-      let asts = parseSql("select id as 'user id' from user")
-      expect(asts).to.have.lengthOf(1)
-      expect(asts[0].type).to.equals('select')
-      expect((asts[0] as Select).columns).to.deep.equals(['user id'])
+    context('column alias', () => {
+      it("should parse column alias with 'AS'", function () {
+        let asts = parseSql("select id as 'user id' from user")
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['user id'])
+      })
+      it("should parse column alias without 'AS'", function () {
+        let asts = parseSql("select id 'user id' from user")
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['user id'])
+      })
     })
 
     it('should parse column with table name', function () {
