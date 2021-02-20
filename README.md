@@ -10,6 +10,7 @@ Project Status: **Building Initial Prototype**
 - [x] Extra column name from select statement
   - [x] Support alias column name
   - [x] Support function call (e.g. `COUNT(*)`)
+  - [x] Support quoted column name with escape sequence
 - [ ] Generate Typescript type for:
   - [ ] Row of select result
   - [ ] Named parameters for prepared statement
