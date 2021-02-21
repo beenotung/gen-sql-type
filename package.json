@@ -1,8 +1,14 @@
 {
   "name": "gen-sql-type",
   "version": "0.0.2",
-  "description": "TODO: add desc",
-  "keywords": [],
+  "description": "Generate Typescript Types from raw SQL statements",
+  "keywords": [
+    "code generation",
+    "sql",
+    "typescript",
+    "type gen",
+    "gen type"
+  ],
   "author": {
     "name": "Beeno Tung",
     "email": "aabbcc1241@yahoo.com.hk",
