@@ -134,8 +134,13 @@ export function parseSql(sql: string) {
   for (offset = 0; offset < tokens.length; nextToken()) {
     token = tokens[offset]
     if (token.type === 'word') {
-      if (token.value.toLowerCase() === 'select') {
+      const type = token.value.toLowerCase()
+      if (type === 'select') {
         parseSelect()
+        continue
+      }
+      if (type === 'update' || type === 'delete') {
+        parseMutation(type)
         continue
       }
     }
@@ -171,6 +176,17 @@ export function parseSql(sql: string) {
       }
       unknownToken('parseSelect')
     }
+    const parameters: string[] = parseParameters()
+    asts.push({ type: 'select', columns, parameters })
+  }
+
+  function parseMutation(type: 'delete' | 'update') {
+    nextToken()
+    const parameters: string[] = parseParameters()
+    asts.push({ type, parameters })
+  }
+
+  function parseParameters() {
     const parameters: string[] = []
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'char' && token.value === ';') {
@@ -180,9 +196,9 @@ export function parseSql(sql: string) {
         parameters.push(token.value)
         continue
       }
-      // skip select body
+      // skip body
     }
-    asts.push({ type: 'select', columns, parameters })
+    return parameters
   }
 
   function nextToken() {
@@ -191,7 +207,11 @@ export function parseSql(sql: string) {
   }
 
   function unknownToken(context: string) {
-    console.error('[TODO] unknown token:', { context, offset, token })
+    console.error('[TODO] [gen-sql-type:parser.ts] unknown token:', {
+      context,
+      offset,
+      token,
+    })
     panic()
   }
 

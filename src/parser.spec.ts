@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { parseSql, transformQuotes } from './parser'
-import { Select } from './ast'
+import { Select, Update } from './ast'
 import { tokenize } from './tokenizer'
 
 describe('parser', () => {
@@ -175,6 +175,25 @@ describe('parser', () => {
         'calls',
         'avg_difference',
       ])
+    })
+  })
+
+  context('mutate expression', () => {
+    it('should parse update express', function () {
+      let asts = parseSql('update user set username = :username where id = :id')
+      expect(asts).to.be.lengthOf(1)
+      let ast = asts[0] as Update
+      expect(ast.type).to.equals('update')
+      expect(ast.parameters).to.contains('username')
+      expect(ast.parameters).to.contains('id')
+    })
+
+    it('should parse delete express', function () {
+      let asts = parseSql('delete from user where id = :id')
+      expect(asts).to.be.lengthOf(1)
+      let ast = asts[0] as Update
+      expect(ast.type).to.equals('delete')
+      expect(ast.parameters).to.contains('id')
     })
   })
 })

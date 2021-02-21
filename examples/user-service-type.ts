@@ -4,3 +4,7 @@ export type LoginUserParameters = {
 export type LoginUserRow = {
   password_hash: any
 }
+
+export type LogoutUserParameters = {
+  token: any
+}

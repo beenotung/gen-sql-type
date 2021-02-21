@@ -22,12 +22,13 @@ export class SqlTypeFile {
       .trim()
     if (code) {
       if (this.code) {
-        this.code += '\n'
+        this.code += '\n\n'
       }
       this.code += code
       writeFileSync(this.file, this.code + '\n')
       if (config.verbose) {
-        console.log('generated', this.file)
+        const file = path.relative(process.cwd(), this.file)
+        console.log('generated type', name, 'into', file)
       }
     }
     return sql

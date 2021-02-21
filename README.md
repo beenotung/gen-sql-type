@@ -8,12 +8,12 @@ Project Status: **Building Initial Prototype**
 
 ## Progress
 
-- [x] Extract types from `SELECT` statement
+- [x] Extract types from sql statement
   - [x] Support alias column name
   - [x] Support function call (e.g. `COUNT(*)`)
-  - [x] Support quoted column name with escape sequence
+  - [x] Support quoted column name with escape sequence (e.g. treat `'can''t'` as `"can't"`)
   - [x] Support named parameters (e.g. `:id` and `@username`)
-- [ ] Extract types from `UPDATE` and `DELETE` statement
+  - [x] Support `SELECT`, `UPDATE`, and `DELETE` statement
 - [x] Generate Typescript type for:
   - [x] Row of select result
   - [x] Named parameters for prepared statement
