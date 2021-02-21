@@ -1,4 +1,4 @@
-import { SqlTypeFile } from '../src/sql-type-file'
+import { SqlTypeFile } from '../src'
 import { LoginUserParameters, LoginUserRow, LogoutUserParameters } from './user-service.types'
 
 const sqlTypeFile = SqlTypeFile.withPrefix(__filename)
