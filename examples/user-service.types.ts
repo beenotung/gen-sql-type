@@ -1,10 +1,10 @@
 export type LoginUserParameters = {
-  id: any
+  id: any,
 }
 export type LoginUserRow = {
-  password_hash: any
+  password_hash: any,
 }
 
 export type LogoutUserParameters = {
-  token: any
+  token: any,
 }

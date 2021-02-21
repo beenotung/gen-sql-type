@@ -34,7 +34,7 @@ export class SqlTypeFile {
     return sql
   }
 
-  static withPrefix(file: string, prefix = '-type') {
+  static withPrefix(file: string, prefix = '.types') {
     const base = path.basename(file)
     const dir = removeLast(file, base)
     const ext = path.extname(base)

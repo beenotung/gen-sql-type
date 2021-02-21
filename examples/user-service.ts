@@ -1,16 +1,16 @@
 import { SqlTypeFile } from '../src/sql-type-file'
-import { LoginUserParameters, LoginUserRow, LogoutUserParameters } from './user-service-type'
+import { LoginUserParameters, LoginUserRow, LogoutUserParameters } from './user-service.types'
 
-let sqlTypeFile = SqlTypeFile.withPrefix(__filename)
+const sqlTypeFile = SqlTypeFile.withPrefix(__filename)
 
 export class UserService {
   async login(parameters: LoginUserParameters): Promise<LoginUserRow> {
-    let sql = sqlTypeFile.wrapSql('LoginUser', 'select password_hash from user where id = :id')
+    const sql = sqlTypeFile.wrapSql('LoginUser', 'select password_hash from user where id = :id')
     return mockExec(sql, parameters)[0]
   }
 
   async logout(parameters: LogoutUserParameters) {
-    let sql = sqlTypeFile.wrapSql('LogoutUser', 'update session set active = false where token = :token')
+    const sql = sqlTypeFile.wrapSql('LogoutUser', 'update session set active = false where token = :token')
     return mockExec(sql, parameters)
   }
 }
@@ -21,7 +21,7 @@ function mockExec(sql: string, parameters: object): any[] {
 
 
 async function test() {
-  let userService = new UserService()
+  const userService = new UserService()
   await userService.login({ id: 123 })
   await userService.logout({ token: '123' })
 }
