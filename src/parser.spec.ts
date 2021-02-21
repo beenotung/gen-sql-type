@@ -128,7 +128,7 @@ describe('parser', () => {
 
     context('named parameters', function () {
       function test(prefix: string) {
-        it(`should recongize parameter prefix '${prefix}'`, () => {
+        it(`should recognize parameter prefix '${prefix}'`, () => {
           let asts = parseSql(
             `select username from user where id = ${prefix}id`,
           )
