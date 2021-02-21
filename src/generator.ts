@@ -1,4 +1,5 @@
 import { AST } from './ast'
+import { panic } from './config'
 import { isKeyword } from './tokenizer'
 
 export function generateType(ast: AST) {
@@ -12,5 +13,6 @@ export function generateType(ast: AST) {
       .join(',')}}`
   }
   console.error('[TODO] unknown ast:', ast)
-  process.exit(1)
+  panic()
+  return ''
 }
