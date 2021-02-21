@@ -40,10 +40,12 @@
   ],
   "dependencies": {
     "@beenotung/tslib": "^16.41.1",
+    "debug": "^4.3.1",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",
+    "@types/debug": "^4.1.5",
     "@types/mocha": "^8.2.1",
     "@types/node": "*",
     "@types/sinon": "^9.0.10",

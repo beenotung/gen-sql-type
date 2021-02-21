@@ -1,5 +1,8 @@
+import debug from 'debug'
 import { AST } from './ast'
 import { Token, tokenize } from './tokenizer'
+
+const log = debug('gen-sql-type:parser')
 
 export function transformQuotes(tokens: Token[]): Token[] {
   tokens = transformQuote(tokens, "'")
@@ -123,7 +126,7 @@ export function parseSql(sql: string) {
   tokens = transformFunctionCall(tokens)
   tokens = transformParameters(tokens)
   tokens = tokens.filter(token => token.type !== 'whitespace')
-  console.log({ tokens })
+  log('parseSql() > tokens:', tokens)
   const asts: AST[] = []
   let offset: number
   let token: Token
