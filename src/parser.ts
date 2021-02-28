@@ -124,8 +124,9 @@ export function parseSql(sql: string) {
   let tokens = tokenize(sql)
   tokens = transformQuotes(tokens)
   tokens = transformColumnWithTableName(tokens)
-  tokens = transformFunctionCall(tokens)
   tokens = transformParameters(tokens)
+  const parameters = scanParameters()
+  tokens = transformFunctionCall(tokens)
   tokens = tokens.filter(token => token.type !== 'whitespace')
   log('parseSql() > tokens:', tokens)
   const asts: AST[] = []
@@ -135,13 +136,15 @@ export function parseSql(sql: string) {
     token = tokens[offset]
     if (token.type === 'word') {
       const type = token.value.toLowerCase()
-      if (type === 'select') {
-        parseSelect()
-        continue
-      }
-      if (type === 'update' || type === 'delete') {
-        parseMutation(type)
-        continue
+      switch (type) {
+        case 'select':
+          parseSelect()
+          continue
+        case 'update':
+        case 'delete':
+        case 'insert':
+          parseMutation(type)
+          continue
       }
     }
     unknownToken('parseSql')
@@ -176,29 +179,33 @@ export function parseSql(sql: string) {
       }
       unknownToken('parseSelect')
     }
-    const parameters: string[] = parseParameters()
+    skipBody()
     asts.push({ type: 'select', columns, parameters })
   }
 
-  function parseMutation(type: 'delete' | 'update') {
+  function parseMutation(type: 'delete' | 'update' | 'insert') {
     nextToken()
-    const parameters: string[] = parseParameters()
+    skipBody()
     asts.push({ type, parameters })
   }
 
-  function parseParameters() {
+  // FIXME scan parameters per SQL statement (currently scan through multiple SQL statements)
+  function scanParameters() {
     const parameters: string[] = []
+    tokens.forEach(token => {
+      if (token.type === 'parameter') {
+        parameters.push(token.value)
+      }
+    })
+    return parameters
+  }
+
+  function skipBody() {
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'char' && token.value === ';') {
         break
       }
-      if (token.type === 'parameter') {
-        parameters.push(token.value)
-        continue
-      }
-      // skip body
     }
-    return parameters
   }
 
   function nextToken() {

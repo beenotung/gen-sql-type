@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { parseSql, transformQuotes } from './parser'
-import { Select, Update } from './ast'
+import { Insert, Select, Update } from './ast'
 import { tokenize } from './tokenizer'
 
 describe('parser', () => {
@@ -138,6 +138,7 @@ describe('parser', () => {
           expect(select.parameters).to.deep.equals(['id'])
         })
       }
+
       test(':')
       test('@')
     })
@@ -194,6 +195,28 @@ describe('parser', () => {
       let ast = asts[0] as Update
       expect(ast.type).to.equals('delete')
       expect(ast.parameters).to.contains('id')
+    })
+
+    context('insert expression', () => {
+      it('should parse single-value insert expression', function () {
+        let asts = parseSql(`insert into user (username, email)
+                             values (:username, :email)`)
+        expect(asts).to.have.lengthOf(1)
+        let insert = asts[0] as Insert
+        expect(insert.type).to.equals('insert')
+        expect(insert.parameters).to.contains('username')
+        expect(insert.parameters).to.contains('email')
+      })
+
+      it('should parse multiple-values insert expression', function () {
+        let asts = parseSql(`insert into user (username)
+                             values (:user_1) (:user_2)`)
+        expect(asts).to.have.lengthOf(1)
+        let insert = asts[0] as Insert
+        expect(insert.type).to.equals('insert')
+        expect(insert.parameters).to.contains('user_1')
+        expect(insert.parameters).to.contains('user_2')
+      })
     })
   })
 })
