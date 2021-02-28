@@ -3,20 +3,22 @@ import { panic } from './config'
 import { isKeyword } from './tokenizer'
 
 export function generateTypes(name: string, ast: AST) {
-  if (ast.type === 'select') {
-    return (
-      `
+  switch (ast.type) {
+    case 'select':
+      return (
+        `
 export type ${name}Parameters = ${toObjectType(ast.parameters)}
 export type ${name}Row = ${toObjectType(ast.columns)}
 `.trim() + '\n'
-    )
-  }
-  if (ast.type === 'delete' || ast.type === 'update') {
-    return (
-      `
+      )
+    case 'delete':
+    case 'update':
+    case 'insert':
+      return (
+        `
 export type ${name}Parameters = ${toObjectType(ast.parameters)}
 `.trim() + '\n'
-    )
+      )
   }
   console.error('[TODO] [gen-sql-type:generator.ts] unknown ast:', ast)
   panic()

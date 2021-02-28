@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Delete, Select, Update } from './ast'
+import { Delete, Insert, Select, Update } from './ast'
 import { generateTypes, toObjectType } from './generator'
 
 describe('generator', function () {
@@ -45,6 +45,14 @@ describe('generator', function () {
     it('should generate typescript code from delete statement', function () {
       let ast: Delete = {
         type: 'delete',
+        parameters: ['id'],
+      }
+      let code = generateTypes('User', ast)
+      expect(code).to.contains(`export type UserParameters = {\n  id: any,\n}`)
+    })
+    it('should generate typescript code from insert statement', function () {
+      let ast: Insert = {
+        type: 'insert',
         parameters: ['id'],
       }
       let code = generateTypes('User', ast)
