@@ -180,7 +180,7 @@ describe('parser', () => {
   })
 
   context('mutate expression', () => {
-    it('should parse update express', function () {
+    it('should parse update expression', function () {
       let asts = parseSql('update user set username = :username where id = :id')
       expect(asts).to.be.lengthOf(1)
       let ast = asts[0] as Update
@@ -189,7 +189,7 @@ describe('parser', () => {
       expect(ast.parameters).to.contains('id')
     })
 
-    it('should parse delete express', function () {
+    it('should parse delete expression', function () {
       let asts = parseSql('delete from user where id = :id')
       expect(asts).to.be.lengthOf(1)
       let ast = asts[0] as Update
