@@ -1,4 +1,4 @@
-export type AST = Select | Delete | Update | Insert
+export type AST = Select | Delete | Update | Insert | Create
 export type Select = {
   type: 'select'
   columns: string[]
@@ -15,4 +15,10 @@ export type Update = {
 export type Insert = {
   type: 'insert'
   parameters: string[]
+}
+export type Create = {
+  type: 'create'
+  table: string
+  columns: string[]
+  types: Record<string, string>
 }

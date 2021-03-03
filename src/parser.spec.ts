@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { parseSql, transformQuotes } from './parser'
-import { Insert, Select, Update } from './ast'
+import { Insert, Select, Update, Create } from './ast'
 import { tokenize } from './tokenizer'
 
 describe('parser', () => {
@@ -217,6 +217,23 @@ describe('parser', () => {
         expect(insert.parameters).to.contains('user_1')
         expect(insert.parameters).to.contains('user_2')
       })
+    })
+  })
+
+  context.only('schema expression', () => {
+    it('should parse basic create table expression', () => {
+      let asts = parseSql(`create table user (
+        id integer primary key,
+        username text,
+        remark json
+      )`)
+      expect(asts).to.be.lengthOf(1)
+      let ast = asts[0] as Create
+      expect(ast.type).to.equals('create')
+      expect(ast.columns).to.have.lengthOf(3)
+      expect(ast.columns).to.contains('id')
+      expect(ast.columns).to.contains('username')
+      expect(ast.columns).to.contains('remark')
     })
   })
 })

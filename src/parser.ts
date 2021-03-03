@@ -145,6 +145,8 @@ export function parseSql(sql: string) {
         case 'insert':
           parseMutation(type)
           continue
+        case 'create':
+          parseCreate()
       }
     }
     unknownToken('parseSql')
@@ -187,6 +189,30 @@ export function parseSql(sql: string) {
     nextToken()
     skipBody()
     asts.push({ type, parameters })
+  }
+
+  function parseCreate() {
+    skipWord('create')
+    skipWord('table')
+    if (isWord('if')) {
+      skipWord('if')
+      skipWord('not')
+      skipWord('exists')
+    }
+  }
+  function isWord(word: string) {
+    return token.type === 'word' && token.value.toLowerCase() === word
+  }
+  function skipWord(word: string) {
+    if (isWord(word)) {
+      nextToken()
+      return
+    }
+    console.error('unexpected token:', {
+      expect: { word },
+      got: token,
+    })
+    throw new Error(`unexpected token`)
   }
 
   // FIXME scan parameters per SQL statement (currently scan through multiple SQL statements)
