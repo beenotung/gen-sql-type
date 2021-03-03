@@ -16,7 +16,11 @@ This library scan the plain sql statements then auto generate Typescript types o
   - [x] Support function call (e.g. `COUNT(*)`)
   - [x] Support quoted column name with escape sequence (e.g. treat `'can''t'` as `"can't"`)
   - [x] Support named parameters (e.g. `:id` and `@username`)
-  - [x] Support `INSERT`, `SELECT`, `UPDATE`, and `DELETE` statement
+  - [x] Supported statement types:
+    - `SELECT`
+    - `UPDATE`
+    - `DELETE`
+    - `INSERT`
 - [x] Generate Typescript type for:
   - [x] Row of select result
   - [x] Named parameters for prepared statement
