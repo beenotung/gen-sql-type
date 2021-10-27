@@ -64,6 +64,61 @@ describe('parser', () => {
       })
     })
 
+    context.only('select from with-alias', function () {
+      it('should parse one with-alias', function () {
+        let asts = parseSql(
+          `
+with ac as (select id, name from user)
+select name from ac
+`,
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['name'])
+      })
+      it('should parse multiple with-alias', function () {
+        let asts = parseSql(
+          `
+with ac1 as (select id, name from user),
+     ac2 as (select name from ac1)
+select name from ac2
+`,
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['name'])
+      })
+      it('should parse nested with-alias', function () {
+        let asts = parseSql(
+          `
+with stat as (
+  with ac as (select id from user)
+  select count(id) as total from ac
+)
+select total from stat
+`,
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['total'])
+      })
+      it('should parse multiple nested with-alias', function () {
+        let asts = parseSql(
+          `
+with stat as (
+  with ac as (select id from user)
+  select count(id) as total from ac
+)
+summary as (select total from stat)
+select total from summary
+`,
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['total'])
+      })
+    })
+
     it('should parse column with table name', function () {
       let asts = parseSql('select user.id from user')
       expect(asts).to.have.lengthOf(1)

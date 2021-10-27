@@ -140,6 +140,10 @@ export function parseSql(sql: string) {
         case 'select':
           parseSelect()
           continue
+        case 'with':
+          skipWith()
+          parseSelect()
+          continue
         case 'update':
         case 'delete':
         case 'insert':
@@ -203,6 +207,16 @@ export function parseSql(sql: string) {
   function skipBody() {
     for (; offset < tokens.length; nextToken()) {
       if (token.type === 'char' && token.value === ';') {
+        break
+      }
+    }
+  }
+
+  function skipWith() {
+    for (; token; ) {
+      offset++
+      token = tokens[offset]
+      if (token.type === 'word' && token.value === 'select') {
         break
       }
     }

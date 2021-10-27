@@ -21,6 +21,7 @@ This library scan the plain sql statements then auto generate Typescript types o
     - `UPDATE`
     - `DELETE`
     - `INSERT`
+  - [x] Support select from `WITH`-clause
 - [x] Generate Typescript type for:
   - [x] Row of select result
   - [x] Named parameters for prepared statement
