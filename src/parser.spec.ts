@@ -64,7 +64,7 @@ describe('parser', () => {
       })
     })
 
-    context.only('select from with-alias', function () {
+    context('select from with-alias', function () {
       it('should parse one with-alias', function () {
         let asts = parseSql(
           `
