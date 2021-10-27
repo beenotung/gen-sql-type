@@ -64,8 +64,8 @@ describe('parser', () => {
       })
     })
 
-    context('select from with-alias', function () {
-      it('should parse one with-alias', function () {
+    context('select from with-clause', function () {
+      it('should parse one with-clause', function () {
         let asts = parseSql(
           `
 with ac as (select id, name from user)
@@ -76,7 +76,18 @@ select name from ac
         expect(asts[0].type).to.equals('select')
         expect((asts[0] as Select).columns).to.deep.equals(['name'])
       })
-      it('should parse multiple with-alias', function () {
+      it('should parse select-clause and with-clause in upper case', function () {
+        let asts = parseSql(
+          `
+WITH ac AS (select id, name from user)
+SELECT name FROM ac
+`,
+        )
+        expect(asts).to.have.lengthOf(1)
+        expect(asts[0].type).to.equals('select')
+        expect((asts[0] as Select).columns).to.deep.equals(['name'])
+      })
+      it('should parse multiple with-clause', function () {
         let asts = parseSql(
           `
 with ac1 as (select id, name from user),
@@ -88,7 +99,7 @@ select name from ac2
         expect(asts[0].type).to.equals('select')
         expect((asts[0] as Select).columns).to.deep.equals(['name'])
       })
-      it('should parse nested with-alias', function () {
+      it('should parse nested with-clause', function () {
         let asts = parseSql(
           `
 with stat as (
@@ -102,7 +113,7 @@ select total from stat
         expect(asts[0].type).to.equals('select')
         expect((asts[0] as Select).columns).to.deep.equals(['total'])
       })
-      it('should parse multiple nested with-alias', function () {
+      it('should parse multiple nested with-clause', function () {
         let asts = parseSql(
           `
 with stat as (

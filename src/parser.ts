@@ -216,7 +216,7 @@ export function parseSql(sql: string) {
     for (; token; ) {
       offset++
       token = tokens[offset]
-      if (token.type === 'word' && token.value === 'select') {
+      if (token.type === 'word' && token.value.toLowerCase() === 'select') {
         break
       }
     }
