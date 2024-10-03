@@ -1,6 +1,6 @@
 {
   "name": "gen-sql-type",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "description": "Generate Typescript Types from raw SQL statements",
   "keywords": [
     "code generation",
