@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { AST } from './ast'
-import { panic } from './config'
+import { config } from './config'
 import { Token, tokenize } from './tokenizer'
 
 const log = debug('gen-sql-type:parser')
@@ -228,12 +228,27 @@ export function parseSql(sql: string) {
   }
 
   function unknownToken(context: string) {
-    console.error('[TODO] [gen-sql-type:parser.ts] unknown token:', {
-      context,
-      offset,
-      token,
-    })
-    panic()
+    if (config.shouldPanic) {
+      console.error('[TODO] [gen-sql-type:parser.ts] unknown token:', {
+        context,
+        offset,
+        token,
+      })
+      process.exit(1)
+    } else {
+      throw new Error(
+        'unknown token: ' +
+          JSON.stringify(
+            {
+              context,
+              offset,
+              token,
+            },
+            null,
+            2,
+          ),
+      )
+    }
   }
 
   return asts

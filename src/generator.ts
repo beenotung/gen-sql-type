@@ -1,5 +1,5 @@
 import { AST } from './ast'
-import { panic } from './config'
+import { config } from './config'
 import { isKeyword } from './tokenizer'
 
 export function generateTypes(name: string, ast: AST) {
@@ -20,9 +20,13 @@ export type ${name}Parameters = ${toObjectType(ast.parameters)}
 `.trim() + '\n'
       )
   }
-  console.error('[TODO] [gen-sql-type:generator.ts] unknown ast:', ast)
-  panic()
-  return ''
+  if (config.shouldPanic) {
+    console.error('[TODO] [gen-sql-type:generator.ts] unknown ast:', ast)
+    process.exit(1)
+    return ''
+  } else {
+    throw new Error('unknown ast: ' + JSON.stringify(ast, null, 2))
+  }
 }
 
 export function toObjectType(fields: string[]) {

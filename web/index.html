@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gen SQL Type</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      main {
+        margin: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        height: calc(100dvh - 1rem);
+      }
+      .row {
+        display: flex;
+        gap: 1rem;
+      }
+      .col {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+      textarea {
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>gen-sql-type</h1>
+      <p>Generate param type and result type from SQL query</p>
+      <div class="row" style="flex-grow: 1">
+        <div class="col">
+          <label for="sql">SQL Query:</label>
+          <textarea id="sql" cols="30" rows="10"></textarea>
+        </div>
+        <div class="col">
+          <label for="ts">Types:</label>
+          <textarea id="ts" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+    </main>
+    <script src="bundle.js"></script>
+  </body>
+</html>

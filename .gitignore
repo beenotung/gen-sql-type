@@ -9,3 +9,4 @@ dist/
 .env
 .nyc_output
 coverage/
+web/bundle.js
