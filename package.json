@@ -21,7 +21,6 @@
     "dev": "npm run bundle -- --watch",
     "bundle": "esbuild web/index.ts --outfile=web/bundle.js --bundle",
     "deploy": "npm run bundle && surge web",
-    "prepare": "rimraf node_modules/@beenotung/tslib/index.*",
     "test": "run-s format tsc test:ts mocha",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -48,7 +47,6 @@
     "dist"
   ],
   "dependencies": {
-    "@beenotung/tslib": "^16.41.1",
     "debug": "^4.3.1",
     "tslib": "^2.1.0"
   },

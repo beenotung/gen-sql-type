@@ -1,5 +1,3 @@
-import { isBetween } from '@beenotung/tslib/compare'
-
 export type Token = Word | Whitespace | Char | Parameter
 export type Word = {
   type: 'word'
@@ -57,4 +55,8 @@ export function isKeyword(char: string) {
     isBetween('a', char, 'z') ||
     isBetween('A', char, 'Z')
   )
+}
+
+function isBetween(lowerBound: string, value: string, upperBound: string) {
+  return lowerBound <= value && value <= upperBound
 }
