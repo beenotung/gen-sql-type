@@ -28,24 +28,32 @@ This library scan the plain sql statements then auto generate Typescript types o
 
 ## Usage Example
 
-Given *user-service.ts*:
+Given _user-service.ts_:
+
 ```typescript
 const sqlTypeFile = SqlTypeFile.withPrefix(__filename)
 
 export class UserService {
   async login(parameters: LoginUserParameters): Promise<LoginUserRow> {
-    const sql: string = sqlTypeFile.wrapSql('LoginUser', 'select password_hash from user where id = :id')
+    const sql: string = sqlTypeFile.wrapSql(
+      'LoginUser',
+      'select password_hash from user where id = :id',
+    )
     return mockExec(sql, parameters)[0]
   }
 
   async logout(parameters: LogoutUserParameters) {
-    const sql: string = sqlTypeFile.wrapSql('LogoutUser', 'update session set active = false where token = :token')
+    const sql: string = sqlTypeFile.wrapSql(
+      'LogoutUser',
+      'update session set active = false where token = :token',
+    )
     return mockExec(sql, parameters)
   }
 }
 ```
 
-Upon execution, it will auto generate *user-service.types.ts*:
+Upon execution, it will auto generate _user-service.types.ts_:
+
 ```typescript
 export type LoginUserParameters = {
   id: any
