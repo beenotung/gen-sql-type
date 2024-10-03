@@ -27,6 +27,7 @@ This library scan the plain sql statements then auto generate Typescript types o
 - [x] Generate Typescript type for:
   - [x] Row of select result
   - [x] Named parameters for prepared statement
+- [x] Isomorphic, support both node.js and browser
 
 ## Usage Example
 
