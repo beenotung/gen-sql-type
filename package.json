@@ -28,7 +28,7 @@
     "postformat": "tslint -p . --fix",
     "build": "run-s clean tsc",
     "tsc": "tsc -p tsconfig.build.json",
-    "test:ts": "ts-node test/index.ts",
+    "test:ts": "tsc -p tsconfig.build.json --noEmit",
     "mocha": "ts-mocha \"{src,test}/**/*.spec.ts\"",
     "coverage": "nyc npm run mocha -- --reporter=progress",
     "report:update": "nyc --reporter=lcov npm run mocha -- --reporter=progress",
